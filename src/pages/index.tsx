@@ -35,21 +35,7 @@ export default function Home() {
               size="lg"
             />
           </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="password">Senha</FormLabel>
-            <Input 
-              name="password" 
-              type="password"
-              id="password"
-              focusBorderColor="pink.500"
-              bgColor="gray.900"
-              variant="filled"
-              _hover={{
-                bgColor: "gray.900",
-              }}
-              size="lg"
-            />
-          </FormControl>
+          
         </Stack>
         <Button
           type="submit"
