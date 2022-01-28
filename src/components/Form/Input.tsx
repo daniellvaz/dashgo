@@ -13,7 +13,7 @@ const Input: ForwardRefRenderFunction<HTMLInputElement, Props> =
   ({ name, label, error = null, ...rest }, ref) => {
 
   return (
-    <FormControl isInvalid={!!error}>
+    <FormControl isInvalid={!!error[name]}>
         { !!label && <FormLabel htmlFor="password">{label}</FormLabel>}
         <InputElement 
           name={name} 
