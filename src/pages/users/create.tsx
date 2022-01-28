@@ -93,8 +93,6 @@ export default function CreateUser() {
             </HStack>
           </Flex>
         </Box>
-
-
       </Flex>
     </Box>
   )
