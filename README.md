@@ -63,7 +63,7 @@
  npm run dev
 ```
 
-### Por fim acessa o localhost no seu browser na port 3000 😀
+### Por fim acessa o localhost no seu browser na porta 3000 😀
 
 #
 
