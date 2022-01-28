@@ -1,11 +1,32 @@
 
-import { Box, Button, Flex, Heading, Icon, Table, Th, Thead, Tr, Checkbox, Tbody, Td, Text } from "@chakra-ui/react";
-import { RiAddLine, RiPencilLine } from "react-icons/ri";
+import Link from "next/link";
+import { RiAddLine } from "react-icons/ri";
 import Header from "../../components/Header";
-import Pagination from "../../components/Pagination";
 import Sidebar from "../../components/Sidebar";
+import Pagination from "../../components/Pagination";
+import { 
+  Box, 
+  Button, 
+  Flex, 
+  Heading, 
+  Icon, 
+  Table, 
+  Th, 
+  Thead, 
+  Tr, 
+  Checkbox, 
+  Tbody, 
+  Td, 
+  Text, 
+  useBreakpointValue 
+} from "@chakra-ui/react";
 
 export default function UserList() {
+  const isWideVersion = useBreakpointValue({
+    base: false,
+    lg: true
+  })
+
   return (
     <Box>
       <Header />
@@ -17,15 +38,17 @@ export default function UserList() {
           <Flex mb="8" justify="space-between" align="center">
             <Heading size="lg" fontWeight="normal">Usuários</Heading>
 
-            <Button 
-              as="a"
-              size="sm"
-              fontSize="sm"
-              colorScheme="pink"
-              leftIcon={<Icon as={RiAddLine} />} 
-            >
-              Criar novo
-            </Button>
+            <Link href="/users/create">
+              <Button 
+                as="a"
+                size="sm"
+                fontSize="sm"
+                colorScheme="pink"
+                leftIcon={<Icon as={RiAddLine} />} 
+              >
+                Criar novo
+              </Button>
+            </Link>
           </Flex>
 
           <Table colorScheme="whiteAlpha">
@@ -35,8 +58,7 @@ export default function UserList() {
                   <Checkbox colorScheme="pink"/>
                 </Th>
                 <Th>Usuário</Th>
-                <Th>Data de cadastro</Th>
-                <Th w="8"></Th>
+                {isWideVersion && <Th>Data de cadastro</Th>}
               </Tr>
             </Thead>
             <Tbody>
@@ -50,18 +72,7 @@ export default function UserList() {
                     <Text fontSize="sm" color="gray.300">daniellmvaz@gmail.com</Text>
                   </Box>
                 </Td>
-                <Td>28 de Janeiro de 2021</Td>
-                <Td>
-                  <Button 
-                    as="a"
-                    size="sm"
-                    fontSize="sm"
-                    colorScheme="purple"
-                    leftIcon={<Icon as={RiPencilLine} />} 
-                  >
-                    Editar
-                  </Button>
-                </Td>
+                {isWideVersion && <Td>28 de Janeiro de 2021</Td>}
               </Tr>
             </Tbody>
           </Table>
