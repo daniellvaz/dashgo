@@ -74,7 +74,7 @@
 - Construção de interfaces com estilização declarativa
 - Manipulação de elementos de forma declarativa e imperativa
 - Utilização do react hook form
-- Utilização do Yup em validação de Usuários
+- Utilização do Yup em validação de formulários
 
 #
 
