@@ -1,12 +1,16 @@
-import { FormControl, FormLabel } from "@chakra-ui/react";
+import { Input as InputElement, FormControl, FormLabel, InputProps } from "@chakra-ui/react";
 
-export default function Input({ name, label }) {
+interface Props extends InputProps {
+  name: string;
+  label?: string;
+}
+
+export default function Input({ name, label, ...rest }: Props) {
   return (
     <FormControl>
-        { !!label && <FormLabel htmlFor="password">Senha</FormLabel>}
-        <Input 
-          name="password" 
-          type="password"
+        { !!label && <FormLabel htmlFor="password">{label}</FormLabel>}
+        <InputElement 
+          name={name} 
           id={name}
           focusBorderColor="pink.500"
           bgColor="gray.900"
@@ -15,6 +19,7 @@ export default function Input({ name, label }) {
             bgColor: "gray.900",
           }}
           size="lg"
+          {...rest}
         />
       </FormControl>
   )
