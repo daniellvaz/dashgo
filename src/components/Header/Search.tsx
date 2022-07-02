@@ -4,9 +4,7 @@ import { useRef } from "react";
 
 export default function SearhcBox() { 
   const inputRef = useRef<HTMLInputElement>(null);
-
-  console.log(inputRef.current)
-
+  
   return (
     <Flex
       as="label"
