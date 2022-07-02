@@ -1,5 +1,5 @@
 
-import Link from "next/link";
+import LinkNext from "next/link";
 import { RiAddLine } from "react-icons/ri";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
@@ -19,27 +19,28 @@ import {
   Td, 
   Text, 
   useBreakpointValue, 
-  Spinner
+  Spinner,
+  Link
 } from "@chakra-ui/react";
-import { useQuery } from "react-query";
+import { useUsers } from "../../services/hooks/useUsers";
+import { useState } from "react";
+import { queryClient } from "../../services/queryClient";
+import { api } from "../../services/api";
 
 export default function UserList() {
-  const { data, isLoading, error } = useQuery('users', async () => {
-    const response = await fetch('http://localhost:3000/api/users');
-    const data = await response.json();
-    const users = data.users.map(user => {
-      return {
-        user,
-        createdAt: new Date(user.createdAt).toLocaleDateString('pt-br', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric'
-        })
-      }
-    });
+  const [page, setPage] = useState(1);
+  const { data, isLoading, isFetching, error } = useUsers(page);
 
-    return users;
-  });
+  async function handelPrefetchUser(id: number) {
+    await queryClient.prefetchQuery(['user', id], async () => {
+      const response = await api.get(`/users/${id}`);
+
+      return response.data
+    },
+    {
+      staleTime: 1000 * 60 * 10
+    })
+  }
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -55,9 +56,11 @@ export default function UserList() {
 
         <Box flex="1" borderRadius={8} bg="gray.800" p="8">
           <Flex mb="8" justify="space-between" align="center">
-            <Heading size="lg" fontWeight="normal">Usuários</Heading>
+            <Heading size="lg" fontWeight="normal">
+              Usuários {!isLoading && isFetching && <Spinner size="sm" color="gray.500" ml={4}/>}
+            </Heading>
 
-            <Link href="/users/create">
+            <LinkNext href="/users/create">
               <Button 
                 as="a"
                 size="sm"
@@ -67,7 +70,7 @@ export default function UserList() {
               >
                 Criar novo
               </Button>
-            </Link>
+            </LinkNext>
           </Flex>
 
           {
@@ -91,14 +94,16 @@ export default function UserList() {
                   </Thead>
                   <Tbody>
                     {
-                      data.map(user => (
+                      data.users.map(user => (
                         <Tr key={user.id}>
                           <Td px="6">
                             <Checkbox colorScheme="pink"/>
                           </Td>
                           <Td>
                             <Box>
-                              <Text fontWeight="bold">{user.name}</Text>
+                              <Link color="purple.400" onMouseEnter={() => handelPrefetchUser(user.id)}> 
+                                <Text fontWeight="bold">{user.name}</Text>
+                              </Link>
                               <Text fontSize="sm" color="gray.300">{user.email}</Text>
                             </Box>
                           </Td>
@@ -112,7 +117,11 @@ export default function UserList() {
                   </Tbody>
                 </Table>
 
-                <Pagination />
+                <Pagination 
+                  totlaCountOfRegister={data.totalCount}
+                  currentPage={page}
+                  onPageChange={setPage}
+                />
               </>
             )
           }

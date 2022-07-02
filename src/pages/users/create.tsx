@@ -7,6 +7,10 @@ import { Box, Button, Divider, Flex, Heading, HStack, SimpleGrid, VStack } from 
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import Input from "../../components/Form/Input";
+import { useMutation } from 'react-query';
+import { api } from '../../services/api';
+import { queryClient } from '../../services/queryClient';
+import { useRouter } from 'next/router';
 interface CreateUserFormData {
   name: string;
   email: string;
@@ -22,13 +26,30 @@ const createUserFormSchema = yup.object().shape({
 })
 
 export default function CreateUser() {
+  const router = useRouter()
+  const createUser = useMutation(async (user: CreateUserFormData) => {
+    const response = await api.post("/users", {
+      user: {
+        ...user,
+        created_at: new Date()
+      }
+    });
+
+    return response.data.user;
+  },{
+    onSuccess: () => {
+      queryClient.invalidateQueries("users")
+    }
+  })
+
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(createUserFormSchema)
   })
 
   const handlerCreateaUser: SubmitHandler<CreateUserFormData> = async (value) => {
-    new Promise((resolve) => setTimeout(() => resolve, 3000))
-    console.log(value);
+    await createUser.mutateAsync(value);
+
+    router.push("/users")
   }
 
   return (
